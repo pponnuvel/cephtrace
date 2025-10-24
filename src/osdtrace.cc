@@ -1404,6 +1404,7 @@ int main(int argc, char **argv) {
    * NOTICE: we provide path and symbol info in SEC for BPF programs
    */
   clog << "Unexpected line hit" << endl;
+
 cleanup:
   clog << "Clean up the eBPF program" << endl;
   ring_buffer__free(rb);
