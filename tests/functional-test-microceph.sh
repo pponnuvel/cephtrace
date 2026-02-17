@@ -176,15 +176,21 @@ sleep 3
 
 info "=== Step 10: Start radostrace in background ==="
 # radostrace will trace all librados clients, including the rbd bench command
-timeout 30 $PROJECT_ROOT/radostrace -i $RADOS_DWARF --skip-version-check >$RADOSTRACE_LOG 2>&1 &
+timeout 60 $PROJECT_ROOT/radostrace -i $RADOS_DWARF --skip-version-check >$RADOSTRACE_LOG 2>&1 &
 sleep 2 # ensure radostrace starts before we get its PID
 RADOSTRACE_PID=$(pidof radostrace)
 info "Started osdtrace with PID $RADOSTRACE_PID"
-sleep 3
+sleep 10
 
 info "=== Step 11: Generate I/O traffic using rbd bench ==="
 # Run rbd bench for write operations
 info "Running rbd bench write..."
+microceph.rbd bench --io-type write --io-size 4M --io-threads 4 --io-total 100M test_pool/testimage
+sleep 2
+microceph.rbd bench --io-type write --io-size 4M --io-threads 4 --io-total 100M test_pool/testimage
+sleep 2
+microceph.rbd bench --io-type write --io-size 4M --io-threads 4 --io-total 100M test_pool/testimage
+sleep 2
 microceph.rbd bench --io-type write --io-size 4M --io-threads 4 --io-total 100M test_pool/testimage &
 RBD_BENCH_PID=$!
 
